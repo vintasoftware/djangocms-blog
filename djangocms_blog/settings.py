@@ -121,6 +121,8 @@ def get_setting(name):
             settings, 'BLOG_CATEGORY_PLUGIN_NAME', _('Categories')),
         'BLOG_ARCHIVE_PLUGIN_NAME': getattr(
             settings, 'BLOG_ARCHIVE_PLUGIN_NAME', _('Archive')),
+        'BLOG_LIVEBLOG_PLUGINS': getattr(
+            settings, 'BLOG_LIVEBLOG_PLUGINS', ('LiveblogPlugin',)),
 
     }
     return default['BLOG_%s' % name]

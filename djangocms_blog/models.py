@@ -155,6 +155,7 @@ class Post(KnockerModel, ModelMeta, TranslatableModel):
         meta={'unique_together': (('language_code', 'slug'),)}
     )
     content = PlaceholderField('post_content', related_name='post_content')
+    liveblog = PlaceholderField('live_blog', related_name='live_blog')
 
     objects = GenericDateTaggedManager()
     tags = TaggableManager(blank=True, related_name='djangocms_blog_tags')
@@ -328,6 +329,14 @@ class Post(KnockerModel, ModelMeta, TranslatableModel):
                self.date_published == self.date_modified)
         updated = self.app_config.send_knock_update and self.is_published
         return new or updated
+
+    @property
+    def liveblog_group(self):
+        return 'liveblog/{apphook}/{lang}/{post}'.format(
+            lang=self.get_current_language(),
+            apphook=self.app_config.namespace,
+            post=self.safe_translation_getter('slug', any_language=True)
+        )
 
 
 class BasePostPlugin(CMSPlugin):

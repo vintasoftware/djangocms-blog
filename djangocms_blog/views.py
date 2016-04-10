@@ -50,6 +50,12 @@ class BaseBlogView(AppConfigMixin, ViewUrlMixin):
         template_path = (self.config and self.config.template_prefix) or 'djangocms_blog'
         return os.path.join(template_path, self.base_template_name)
 
+    def liveblog_enabled(self):
+        try:
+            from django.apps import apps
+            return apps.is_installed('djangocms_blog.liveblog')
+        except ImportError:
+            return False
 
 class PostListView(BaseBlogView, ListView):
     model = Post
