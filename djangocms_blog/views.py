@@ -58,6 +58,7 @@ class BaseBlogListView(BaseBlogView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseBlogListView, self).get_context_data(**kwargs)
+        context['categories'] = BlogCategory.objects.all()
         context['TRUNCWORDS_COUNT'] = get_setting('POSTS_LIST_TRUNCWORDS_COUNT')
         return context
 
