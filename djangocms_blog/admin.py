@@ -46,8 +46,7 @@ class PostAdmin(PlaceholderAdminMixin, FrontendEditableAdminMixin,
                 ModelAppHookConfig, TranslatableAdmin):
     form = PostAdminForm
     list_display = [
-        'title', 'author', 'date_published', 'app_config', 'all_languages_column',
-        'date_published_end'
+        'title', 'author', 'date_published', 'app_config', 'all_languages_column'
     ]
     list_filter = ('app_config',)
     date_hierarchy = 'date_published'
@@ -59,17 +58,7 @@ class PostAdmin(PlaceholderAdminMixin, FrontendEditableAdminMixin,
             'fields': [('title', 'categories', 'publish', 'app_config')]
         }),
         ('Info', {
-            'fields': (['slug', 'tags'],
-                       ('date_published', 'date_published_end', 'enable_comments')),
-            'classes': ('collapse',)
-        }),
-        ('Images', {
-            'fields': (('main_image', 'main_image_thumbnail', 'main_image_full'),),
-            'classes': ('collapse',)
-        }),
-        ('SEO', {
-            'fields': [('meta_description', 'meta_title', 'meta_keywords')],
-            'classes': ('collapse',)
+            'fields': (['slug', 'tags', 'date_published'],),
         }),
     ]
 

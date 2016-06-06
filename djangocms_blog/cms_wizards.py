@@ -61,7 +61,8 @@ try:
             description=_('Create a new {0} in {1}').format(config.object_name, config.app_title),
         )
         try:
-            wizard_pool.register(post_wizard)
+            pass
+            # wizard_pool.register(post_wizard)
         except AlreadyRegisteredException:  # pragma: no cover
             if settings.DEBUG:
                 raise
