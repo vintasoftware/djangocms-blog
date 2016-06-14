@@ -15,6 +15,8 @@ from parler.views import TranslatableSlugMixin, ViewUrlMixin
 from .models import BlogCategory, Post
 from .settings import get_setting
 
+from django.conf import settings
+
 User = get_user_model()
 
 
@@ -97,6 +99,7 @@ class PostDetailView(TranslatableSlugMixin, BaseBlogView, DetailView):
         context['meta'] = self.get_object().as_meta()
         context['instant_article'] = self.instant_article
         context['use_placeholder'] = get_setting('USE_PLACEHOLDER')
+        context['DISQUS_SITENAME'] = settings.DISQUS_SITENAME
         setattr(self.request, get_setting('CURRENT_POST_IDENTIFIER'), self.get_object())
         return context
 
