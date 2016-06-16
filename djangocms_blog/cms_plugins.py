@@ -30,7 +30,7 @@ class BlogLatestEntriesPlugin(BlogPlugin):
     model = LatestPostsPlugin
     form = LatestEntriesForm
     filter_horizontal = ('categories',)
-    fields = ('app_config', 'latest_posts', 'tags', 'categories')
+    fields = ('app_config', 'title', 'latest_posts', 'tags', 'categories')
     cache = False
     base_render_template = 'plugins/latest_entries.html'
 

@@ -372,6 +372,8 @@ class BasePostPlugin(CMSPlugin):
 
 @python_2_unicode_compatible
 class LatestPostsPlugin(BasePostPlugin):
+    title = HTMLField(blank=True, verbose_name=_('Title'))
+
     latest_posts = models.IntegerField(_('articles'), default=get_setting('LATEST_POSTS'),
                                        help_text=_('The number of latests '
                                                    u'articles to be displayed.'))
