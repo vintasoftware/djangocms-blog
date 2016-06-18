@@ -13,16 +13,10 @@ def get_setting(name):
     from meta import settings as meta_settings
 
     PERMALINKS = (
-        ('full_date', _('Full date')),
-        ('short_date', _('Year /  Month')),
-        ('category', _('Category')),
-        ('slug', _('Just slug')),
+        ('year_slug', _('Year and slug')),
     )
     PERMALINKS_URLS = {
-        'full_date': r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<slug>\w[-\w]*)/$',
-        'short_date': r'^(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<slug>\w[-\w]*)/$',
-        'category': r'^(?P<category>\w[-\w]*)/(?P<slug>\w[-\w]*)/$',
-        'slug': r'^(?P<slug>\w[-\w]*)/$',
+        'year_slug': r'^(?P<year>\d{4})/(?P<slug>\w[-\w]*)$/',
     }
     MENU_TYPES = (
         (MENU_TYPE_COMPLETE, _('Categories and posts')),

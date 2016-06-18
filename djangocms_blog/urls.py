@@ -4,23 +4,10 @@ from __future__ import absolute_import, print_function, unicode_literals
 from django.conf.urls import url
 
 from .feeds import FBInstantArticles, LatestEntriesFeed, TagFeed
-from .settings import get_setting
 from .views import (
     AuthorEntriesView, CategoryEntriesView, PostArchiveView, PostDetailView, PostListView,
     TaggedListView,
 )
-
-
-def get_urls():
-    urls = get_setting('PERMALINK_URLS')
-    details = []
-    for urlconf in urls.values():
-        details.append(
-            url(urlconf, PostDetailView.as_view(), name='post-detail'),
-        )
-    return details
-
-detail_urls = get_urls()
 
 urlpatterns = [
     url(r'^$',
@@ -41,4 +28,8 @@ urlpatterns = [
         TaggedListView.as_view(), name='posts-tagged'),
     url(r'^tag/(?P<tag>[-\w]+)/feed/$',
         TagFeed(), name='posts-tagged-feed'),
-] + detail_urls
+    url(r'^(?P<year>\d{4})/(?P<slug>\w[-\w]*).html$',
+        PostDetailView.as_view(), name='post-detail'),
+    url(r'^(?P<year>\d{4})/(?P<slug>\w[-\w]*)/$',
+        PostDetailView.as_view(), name='post-detail'),
+]
