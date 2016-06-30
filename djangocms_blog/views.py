@@ -57,10 +57,10 @@ class BaseBlogView(AppConfigMixin, ViewUrlMixin):
 class BaseBlogListView(BaseBlogView):
     context_object_name = 'post_list'
     base_template_name = 'post_list.html'
-
     def get_context_data(self, **kwargs):
         context = super(BaseBlogListView, self).get_context_data(**kwargs)
-        context['categories'] = BlogCategory.objects.all()
+        context['categories'] = BlogCategory.objects.translated('en').order_by('translations__name')
+
         context['TRUNCWORDS_COUNT'] = get_setting('POSTS_LIST_TRUNCWORDS_COUNT')
         return context
 
