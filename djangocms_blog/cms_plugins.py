@@ -45,7 +45,7 @@ class BlogLatestEntriesPluginCached(BlogPlugin):
     """
     Cached plugin which returns the latest published posts
     """
-    name = get_setting('LATEST_ENTRIES_PLUGIN_NAME')
+    name = get_setting('LATEST_ENTRIES_PLUGIN_CACHED_NAME')
     model = LatestPostsPlugin
     form = LatestEntriesForm
     filter_horizontal = ('categories',)
@@ -54,7 +54,7 @@ class BlogLatestEntriesPluginCached(BlogPlugin):
 
     def render(self, context, instance, placeholder):
         context = super(BlogLatestEntriesPluginCached, self).render(context, instance, placeholder)
-        context['posts_list'] = instance.get_posts()
+        context['posts_list'] = instance.get_posts(context['request'])
         context['TRUNCWORDS_COUNT'] = get_setting('POSTS_LIST_TRUNCWORDS_COUNT')
         return context
 
