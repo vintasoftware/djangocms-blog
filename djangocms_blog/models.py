@@ -230,6 +230,21 @@ class Post(KnockerModel, ModelMeta, TranslatableModel):
             translation.slug = slugify(translation.title)
         super(Post, self).save_translation(translation, *args, **kwargs)
 
+    def fast_get_absolute_url(self, lang=None):
+        if not lang or lang not in self.get_available_languages():
+            lang = self.get_current_language()
+        if not lang or lang not in self.get_available_languages():
+            lang = get_language()
+        with switch_language(self, lang):
+            kwargs = {}
+            if self.date_published:
+                current_date = self.date_published
+            else:
+                current_date = self.date_created
+            kwargs['year'] = current_date.year
+            kwargs['slug'] = self.safe_translation_getter('slug', language_code=lang, any_language=True)  # NOQA
+            return reverse('%s:post-detail' % self.app_config.namespace, kwargs=kwargs)
+
     def get_absolute_url(self, lang=None):
         if not lang or lang not in self.get_available_languages():
             lang = self.get_current_language()
