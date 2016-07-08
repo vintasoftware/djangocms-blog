@@ -51,7 +51,7 @@ class PostAdmin(PlaceholderAdminMixin, FrontendEditableAdminMixin,
     list_filter = ('app_config',)
     date_hierarchy = 'date_published'
     raw_id_fields = ['author']
-    frontend_editable_fields = ('title', 'abstract', 'post_text')
+    frontend_editable_fields = ('title', 'abstract', 'post_markdown')
     enhance_exclude = ('main_image', 'tags')
     _fieldsets = [
         (None, {
@@ -166,12 +166,12 @@ class PostAdmin(PlaceholderAdminMixin, FrontendEditableAdminMixin,
             if config.use_abstract:
                 fsets[0][1]['fields'].append('abstract')
             if not config.use_placeholder:
-                fsets[0][1]['fields'].append('post_text')
+                fsets[0][1]['fields'].append('post_markdown')
         else:
             if get_setting('USE_ABSTRACT'):
                 fsets[0][1]['fields'].append('abstract')
             if not get_setting('USE_PLACEHOLDER'):
-                fsets[0][1]['fields'].append('post_text')
+                fsets[0][1]['fields'].append('post_markdown')
         if get_setting('MULTISITE') and not self.has_restricted_sites(request):
             fsets[1][1]['fields'][0].append('sites')
         if request.user.is_superuser:
