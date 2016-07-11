@@ -2,6 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import hashlib
+import markdown
 
 from aldryn_apphooks_config.fields import AppHookConfigField
 from aldryn_apphooks_config.managers.parler import AppHookConfigTranslatableManager
@@ -160,6 +161,8 @@ class Post(KnockerModel, ModelMeta, TranslatableModel):
                                     max_length=255,
                                     blank=True, default=''),
         post_text=HTMLField(_('text'), default='', blank=True),
+        post_markdown=models.TextField(verbose_name=_('markdown'),
+                                       blank=True, default=''),
         meta={'unique_together': (('language_code', 'slug'),)}
     )
     content = PlaceholderField('post_content', related_name='post_content')
@@ -226,6 +229,11 @@ class Post(KnockerModel, ModelMeta, TranslatableModel):
         """
         Handle some auto configuration during save
         """
+        if translation.post_markdown:
+            markdown_extensions = ['markdown.extensions.fenced_code',
+                                   'markdown.extensions.codehilite']
+            translation.post_text = markdown.markdown(translation.post_markdown,
+                                                      extensions=markdown_extensions)
         if not translation.slug and translation.title:
             translation.slug = slugify(translation.title)
         super(Post, self).save_translation(translation, *args, **kwargs)
