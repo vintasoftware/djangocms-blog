@@ -5,7 +5,7 @@ from django.db import migrations
 from django.utils.html import strip_tags
 
 
-def migrate_abstract(apps, schema_editor):
+def migrate_meta_description(apps, schema_editor):
     PostTranslation = apps.get_model("djangocms_blog", "PostTranslation")
     abstract_default = PostTranslation._meta.get_field('abstract').get_default()
     for post in PostTranslation.objects.all():
@@ -21,5 +21,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(migrate_abstract),
+        migrations.RunPython(migrate_meta_description),
     ]
