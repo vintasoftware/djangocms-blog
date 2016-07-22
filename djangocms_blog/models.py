@@ -29,7 +29,6 @@ from taggit_autosuggest.managers import TaggableManager
 from .cms_appconfig import BlogConfig
 from .managers import GenericDateTaggedManager
 from .settings import get_setting
-
 BLOG_CURRENT_POST_IDENTIFIER = get_setting('CURRENT_POST_IDENTIFIER')
 BLOG_CURRENT_NAMESPACE = get_setting('CURRENT_NAMESPACE')
 
@@ -232,8 +231,10 @@ class Post(KnockerModel, ModelMeta, TranslatableModel):
         if translation.post_markdown:
             markdown_extensions = ['markdown.extensions.fenced_code',
                                    'markdown.extensions.codehilite']
-            translation.post_text = markdown.markdown(translation.post_markdown,
-                                                      extensions=markdown_extensions)
+            html_text = markdown.markdown(translation.post_markdown,
+                                          extensions=markdown_extensions)
+            translation.post_text = html_text
+            translation.abstract = strip_tags(html_text)[:350]
         if not translation.slug and translation.title:
             translation.slug = slugify(translation.title)
         super(Post, self).save_translation(translation, *args, **kwargs)

@@ -47,3 +47,5 @@ docs
 *~
 *.db
 *.sqlite
+
+.DS_Store
