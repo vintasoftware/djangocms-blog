@@ -12,4 +12,10 @@ def replace_character(character):
 @register.filter
 def get_post_image(post):
     get_post = BeautifulSoup(post, 'html.parser')
-    return get_post.img['src']
+    if get_post.img:
+        try:
+            return get_post.img['src']
+        except LookupError:
+            pass 
+    
+    return 'https://s3.amazonaws.com/vinta-cms/media/vinta-team.jpg'
