@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-import os.path
+import os.path, re
 
 from aldryn_apphooks_config.mixins import AppConfigMixin
 from django.contrib.auth import get_user_model
@@ -16,6 +16,7 @@ from .models import BlogCategory, Post
 from .settings import get_setting
 
 from django.conf import settings
+from django.shortcuts import redirect, get_object_or_404
 
 User = get_user_model()
 
@@ -154,8 +155,19 @@ class AuthorEntriesView(BaseBlogListView, ListView):
             qs = qs.filter(**{'author__%s' % User.USERNAME_FIELD: self.kwargs['username']})
         return qs
 
+    def dispatch(self, request, *args, **kwargs):
+        # Removing not allowed characters
+        username = self.kwargs['username']
+        username_no_trash = re.sub(r'[^0-9a-zA-Z]|html$', '', username)
+
+        if username != username_no_trash:
+            return redirect(self.view_url_name, username=username_no_trash)
+
+        context = super(AuthorEntriesView, self).dispatch(request, *args, **kwargs)
+        return context
+
     def get_context_data(self, **kwargs):
-        kwargs['author'] = User.objects.get(**{User.USERNAME_FIELD: self.kwargs.get('username')})
+        kwargs['author'] = get_object_or_404(User, **{User.USERNAME_FIELD: self.kwargs.get('username')})
         context = super(AuthorEntriesView, self).get_context_data(**kwargs)
         return context
 
