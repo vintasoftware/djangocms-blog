@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils.timezone import now
 from django.utils.translation import get_language
 from django.views.generic import DetailView, ListView
+from django.http import Http404
 from parler.views import TranslatableSlugMixin, ViewUrlMixin
 
 from .models import BlogCategory, Post
@@ -176,12 +177,26 @@ class CategoryEntriesView(BaseBlogListView, ListView):
     _category = None
     view_url_name = 'djangocms_blog:posts-category'
 
+    def dispatch(self, request, *args, **kwargs):
+        # Removing not allowed characters
+        category = self.kwargs['category']
+        category_no_trash = re.sub(r'[^0-9a-zA-Z]|html$', '', category)
+
+        if category != category_no_trash:
+            return redirect(self.view_url_name, category=category_no_trash)
+
+        context = super(CategoryEntriesView, self).dispatch(request, *args, **kwargs)
+        return context
+
     @property
     def category(self):
         if not self._category:
-            self._category = BlogCategory.objects.active_translations(
-                get_language(), slug=self.kwargs['category']
-            ).get()
+            try:
+                self._category = BlogCategory.objects.active_translations(
+                    get_language(), slug=self.kwargs['category']
+                ).get()
+            except BlogCategory.DoesNotExist:
+                raise Http404
         return self._category
 
     def get(self, *args, **kwargs):
